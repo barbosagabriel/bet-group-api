@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Entities;
 using Entities.Models;
+using Business.Contracts;
 
 namespace BetGroup.Controllers
 {
@@ -14,18 +15,18 @@ namespace BetGroup.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        private readonly RepositoryContext _context;
+        private readonly IUserBusiness _business;
 
-        public UsersController(RepositoryContext context)
+        public UsersController(IUserBusiness context)
         {
-            _context = context;
+            _business = context;
         }
 
         // GET: api/Users
         [HttpGet]
         public IEnumerable<User> GetUsers()
         {
-            return _context.Users;
+            return _business.FindAllAsync().Result;
         }
 
         // GET: api/Users/5
@@ -37,7 +38,7 @@ namespace BetGroup.Controllers
                 return BadRequest(ModelState);
             }
 
-            var user = await _context.Users.FindAsync(id);
+            var user = await _business.FindByIdAsync(id);
 
             if (user == null)
             {
@@ -60,16 +61,14 @@ namespace BetGroup.Controllers
             {
                 return BadRequest();
             }
-
-            _context.Entry(user).State = EntityState.Modified;
-
+            
             try
             {
-                await _context.SaveChangesAsync();
+                await _business.UpdateAsync(user);
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!UserExists(id))
+                if (! await UserExists(id))
                 {
                     return NotFound();
                 }
@@ -91,8 +90,7 @@ namespace BetGroup.Controllers
                 return BadRequest(ModelState);
             }
 
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
+            await _business.CreateAsync(user);
 
             return CreatedAtAction("GetUser", new { id = user.Id }, user);
         }
@@ -106,21 +104,22 @@ namespace BetGroup.Controllers
                 return BadRequest(ModelState);
             }
 
-            var user = await _context.Users.FindAsync(id);
+            var user = await _business.FindByIdAsync(id);
             if (user == null)
             {
                 return NotFound();
             }
 
-            _context.Users.Remove(user);
-            await _context.SaveChangesAsync();
+            await _business.DeleteAsync(user);
 
             return Ok(user);
         }
 
-        private bool UserExists(int id)
+        private async Task<bool> UserExists(int id)
         {
-            return _context.Users.Any(e => e.Id == id);
+            var user = await _business.FindByIdAsync(id);
+
+            return user != null ? true : false;
         }
     }
 }

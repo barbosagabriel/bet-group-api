@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BetGroup.Extensions;
+using Business;
+using Business.Contracts;
+using Entities.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -11,6 +14,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Repository;
+using Repository.Contracts;
 using Swashbuckle.AspNetCore.Swagger;
 
 namespace BetGroup
@@ -49,6 +54,8 @@ namespace BetGroup
             });
 
             services.ConfigureMySqlContext(Configuration);
+            services.ConfigureBusiness();
+            services.ConfigureRepository();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -2,11 +2,12 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Business.Contracts
 {
-    public interface IUserBusiness
+    public interface IUserBusiness : IBusinessBase<User>
     {
-        void Create(User user);
+        Task<IEnumerable<User>> FindByName(string name);
     }
 }

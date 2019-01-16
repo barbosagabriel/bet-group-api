@@ -4,21 +4,19 @@ using Repository.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Business
 {
-    public class UserBusiness : IUserBusiness
-    {
-        public IUserRepository _repository { get; set; }
-
-        public UserBusiness(IUserRepository repository)
+    public class UserBusiness : BusinessBase<User>, IUserBusiness
+    {        
+        public UserBusiness(IRepositoryBase<User> repository) : base(repository)
         {
-            _repository = repository;
         }
 
-        public void Create(User user)
+        public Task<IEnumerable<User>> FindByName(string name)
         {
-            _repository.Create(user);
+            throw new NotImplementedException();
         }
     }
 }
