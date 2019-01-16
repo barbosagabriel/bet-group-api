@@ -24,9 +24,9 @@ namespace BetGroup.Controllers
 
         // GET: api/Users
         [HttpGet]
-        public IEnumerable<User> GetUsers()
+        public async Task<IEnumerable<User>> GetUsers()
         {
-            return _business.FindAllAsync().Result;
+            return await _business.FindAllAsync();
         }
 
         // GET: api/Users/5
@@ -64,7 +64,7 @@ namespace BetGroup.Controllers
             
             try
             {
-                await _business.UpdateAsync(user);
+                Ok(await _business.UpdateAsync(user));
             }
             catch (DbUpdateConcurrencyException)
             {
