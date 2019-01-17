@@ -10,9 +10,11 @@ namespace Entities.Models
         [Key]
         public int Id { get; set; }
 
-        public DateTime? CreatedAt { get; set; }
+        [Required(ErrorMessage = "O campo 'Data de Criação' é obrigatório.")]
+        public DateTime CreatedAt { get; set; }
 
-        public DateTime? UpdatedAt { get; set; }
+        [Required(ErrorMessage = "O campo 'Data de Atualizacao' é obrigatório.")]
+        public DateTime UpdatedAt { get; set; }
 
         public DateTime? DeletedAt { get; set; }
     }
