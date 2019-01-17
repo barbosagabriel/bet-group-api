@@ -22,6 +22,11 @@ namespace Business
             return _repository.DeleteAsync(entity);
         }
 
+        public Task DeleteLogicalAsync(T entity)
+        {
+            return _repository.DeleteLogicalAsync(entity);
+        }
+
         public Task<IEnumerable<T>> FindAllAsync()
         {
             return _repository.FindAllAsync();

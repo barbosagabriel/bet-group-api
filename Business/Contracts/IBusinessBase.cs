@@ -11,6 +11,7 @@ namespace Business.Contracts
         Task<IEnumerable<T>> FindAllAsync();
         Task<T> FindByIdAsync(int id);
         Task DeleteAsync(T entity);
+        Task DeleteLogicalAsync(T entity);
         Task<T> UpdateAsync(T entity);
         Task<T> CreateAsync(T entity);
     }

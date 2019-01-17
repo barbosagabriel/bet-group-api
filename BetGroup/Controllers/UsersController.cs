@@ -66,16 +66,9 @@ namespace BetGroup.Controllers
             {
                 Ok(await _business.UpdateAsync(user));
             }
-            catch (DbUpdateConcurrencyException)
+            catch (Exception)
             {
-                if (! await UserExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                return BadRequest();
             }
 
             return NoContent();
@@ -95,10 +88,10 @@ namespace BetGroup.Controllers
             return CreatedAtAction("GetUser", new { id = user.Id }, user);
         }
 
-        // DELETE: api/Users/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteUser([FromRoute] int id)
+        [HttpPost("DeleteLogical/{id}")]
+        public async Task<IActionResult> DeleteUserLogical([FromRoute] int id)
         {
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -110,16 +103,30 @@ namespace BetGroup.Controllers
                 return NotFound();
             }
 
-            await _business.DeleteAsync(user);
+            await _business.DeleteLogicalAsync(user);
 
             return Ok(user);
         }
 
-        private async Task<bool> UserExists(int id)
-        {
-            var user = await _business.FindByIdAsync(id);
+        // DELETE: api/Users/5
+        //[HttpDelete("{id}")]
+        //public async Task<IActionResult> DeleteUser([FromRoute] int id)
+        //{
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return BadRequest(ModelState);
+        //    }
 
-            return user != null ? true : false;
-        }
+        //    var user = await _business.FindByIdAsync(id);
+        //    if (user == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    await _business.DeleteAsync(user);
+
+        //    return Ok(user);
+        //}
+        
     }
 }
